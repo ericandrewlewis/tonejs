@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .controls {
+      text-align: center;
+      padding: 40px;
+    }
+    /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.waveform-canvas {
+  width: 100%;
+}
+</style>
+</head>
+
+<body>
+  <div class="controls">
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div>
+    <canvas class="waveform-canvas"></canvas>
+  </div>
+  <script src="https://tonejs.github.io/build/Tone.js"></script>
+  <script>
+    const oscillator = new Tone.Oscillator(400, "sine");
+    oscillator.connect(Tone.Master);
+    const waveform = new Tone.Waveform(1024);
+    oscillator.connect(waveform);
+
+    document.querySelector('.switch').addEventListener('change', evt => {
+      if (evt.target.checked) {
+        oscillator.start();
+      } else {
+        oscillator.stop();
+      }
+
+    });
+    const waveContext = document.querySelector('.waveform-canvas').getContext("2d");
+
+    const canvasWidth = waveContext.canvas.width = waveContext.canvas.clientWidth;
+    const canvasHeight = waveContext.canvas.height = waveContext.canvas.clientHeight;
+
+    // Find the point in the wave form values array where the wave
+    // is on the ascent across the middle.
+    function findIndexOfTriggerPoint(values) {
+      for (let i = 0; i < values.length; i++) {
+        if (values[i - 1] < 0.5 && values[i] > 0.5) {
+          return i;
+        }
+      }
+    }
+
+    function drawWaveform(values) {
+      waveContext.clearRect(0, 0, canvasWidth, canvasHeight);
+      waveContext.beginPath();
+      waveContext.lineJoin = "round";
+      waveContext.lineWidth = 10;
+      const stageWidth = canvasWidth - 20;
+      const stageHeight = canvasHeight - 20;
+      let triggerPoint = findIndexOfTriggerPoint(values);
+      let valueIndex = triggerPoint;
+      waveContext.moveTo(10, 10 + (values[valueIndex] + 1) / 2 * stageHeight);
+      for (let i = 1; i < values.length; i++) {
+        const value = (values[valueIndex] + 1) / 2;
+        const x = 10 + stageWidth * (i / values.length);
+        const y = 10 + value * stageHeight;
+        waveContext.lineTo(x, y);
+        if (valueIndex === values.length - 1) {
+          break;
+        } else {
+          valueIndex++;
+        }
+      }
+      waveContext.stroke();
+    }
+
+    function loop() {
+      requestAnimationFrame(loop);
+      var waveformValues = waveform.getValue();
+
+      drawWaveform(waveformValues);
+    }
+    loop();
+
+  </script>
+</body>
+
+</html>
