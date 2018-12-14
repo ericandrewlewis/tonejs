@@ -26,14 +26,16 @@
     .keyboard-container {
       position: absolute;
       top: 35%;
-    bottom: 5%;
-    left: 10%;
-    right: 10%;
+      bottom: 5%;
+      left: 10%;
+      right: 10%;
     }
 
     .keyboard-key {
       border-radius: 5px;
       border: black 1px solid;
+      font-size: 16px;
+      font-family: monospace;
     }
 
     .white-key {
@@ -41,6 +43,7 @@
       height: 100%;
       background-color: #FBFFFE;
       width: calc(100% / 8);
+      padding-top: 25%;
     }
 
     .white-key.active {
@@ -53,6 +56,8 @@
       background-color: #38302E;
       z-index: 1;
       width: calc(100% / 12);
+      color:#FBFFFE;
+      padding-top: 20%;
     }
 
     .black-key.active {
@@ -105,19 +110,19 @@
 <body>
   <div class="keyboard-container">
     <div class="keyboard">
-      <button class="keyboard-key white-key c-3" data-note="c3"></button>
-      <button class="keyboard-key black-key c-sharp-3" data-note="c#3"></button>
-      <button class="keyboard-key white-key d-3" data-note="d3"></button>
-      <button class="keyboard-key black-key d-sharp-3" data-note="d#3"></button>
-      <button class="keyboard-key white-key e-3" data-note="e3"></button>
-      <button class="keyboard-key white-key f-3" data-note="f3"></button>
-      <button class="keyboard-key black-key f-sharp-3" data-note="f#3"></button>
-      <button class="keyboard-key white-key g-3" data-note="g3"></button>
-      <button class="keyboard-key black-key g-sharp-3" data-note="g#3"></button>
-      <button class="keyboard-key white-key a-3" data-note="a3"></button>
-      <button class="keyboard-key black-key a-sharp-3" data-note="a#3"></button>
-      <button class="keyboard-key white-key b-3" data-note="b3"></button>
-      <button class="keyboard-key white-key c-4" data-note="c4"></button>
+      <button class="keyboard-key white-key c-3" data-note="c3">z</button>
+      <button class="keyboard-key black-key c-sharp-3" data-note="c#3">s</button>
+      <button class="keyboard-key white-key d-3" data-note="d3">x</button>
+      <button class="keyboard-key black-key d-sharp-3" data-note="d#3">d</button>
+      <button class="keyboard-key white-key e-3" data-note="e3">c</button>
+      <button class="keyboard-key white-key f-3" data-note="f3">v</button>
+      <button class="keyboard-key black-key f-sharp-3" data-note="f#3">g</button>
+      <button class="keyboard-key white-key g-3" data-note="g3">b</button>
+      <button class="keyboard-key black-key g-sharp-3" data-note="g#3">h</button>
+      <button class="keyboard-key white-key a-3" data-note="a3">n</button>
+      <button class="keyboard-key black-key a-sharp-3" data-note="a#3">j</button>
+      <button class="keyboard-key white-key b-3" data-note="b3">m</button>
+      <button class="keyboard-key white-key c-4" data-note="c4">,</button>
     </div>
   </div>
   <script src="https://tonejs.github.io/build/Tone.js"></script>
