@@ -230,23 +230,27 @@
     }
     loop();
 
-    document.querySelector('.keyboard').addEventListener('mousedown', evt => {
+    const onNoteTouch = evt => {
       if (evt.target.classList.contains('keyboard-key') !== true) {
         return;
       }
       const el = evt.target;
       const note = el.getAttribute('data-note');
       synthInterface.triggerAttack(note);
-    });
+    }
+    document.querySelector('.keyboard').addEventListener('mousedown', onNoteTouch);
+    document.querySelector('.keyboard').addEventListener('touchstart', onNoteTouch);
 
-    document.querySelector('.keyboard').addEventListener('mouseup', evt => {
+    const onNoteRelease = evt => {
       if (evt.target.classList.contains('keyboard-key') !== true) {
         return;
       }
       const el = evt.target;
       const note = el.getAttribute('data-note');
       synthInterface.triggerRelease(note);
-    });
+    }
+    document.querySelector('.keyboard').addEventListener('mouseup', onNoteRelease);
+    document.querySelector('.keyboard').addEventListener('touchend', onNoteRelease);
 
     const letterToNoteMap = {
       z: 'c3',
