@@ -123,10 +123,14 @@ input:checked + .slider:before {
       const stageWidth = canvasWidth - 20;
       const stageHeight = canvasHeight - 20;
       let frequencyValueIndex = findIndexOfTriggerPoint(frequencyValues);
-      waveContext.moveTo(10, 10 + (frequencyValues[frequencyValueIndex] + 1) / 2 * stageHeight);
+      {
+        const value = (frequencyValues[frequencyValueIndex] + 1) / 2;
+        const y = 10 + (stageHeight - (value * stageHeight));
+        waveContext.moveTo(0, y);
+      }
       for (let x = 1; x < stageWidth; x++) {
         const value = (frequencyValues[frequencyValueIndex] + 1) / 2;
-        const y = 10 + value * stageHeight;
+        const y = 10 + (stageHeight - (value * stageHeight));
         waveContext.lineTo(x, y);
         if (frequencyValueIndex === frequencyValues.length - 1) {
           break;

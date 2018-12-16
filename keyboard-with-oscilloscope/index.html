@@ -212,7 +212,7 @@
       waveContext.moveTo(0, (frequencyValues[frequencyValueIndex] + 1) / 2 * canvasHeight);
       for (let x = 1; x < canvasWidth; x++) {
         const value = (frequencyValues[frequencyValueIndex] + 1) / 2;
-        const y = value * canvasHeight;
+        const y = canvasHeight - (value * canvasHeight);
         waveContext.lineTo(x, y);
         if (frequencyValueIndex === frequencyValues.length - 1) {
           break;
