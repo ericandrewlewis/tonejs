@@ -170,7 +170,7 @@
           this.keys[key] = false;
         });
         this.synth = new Tone.PolySynth(6, Tone.Synth, {oscillator: {
-          type: 'square'
+          type: 'sine'
         }}).toMaster();
       }
       triggerAttack(note) {
@@ -188,23 +188,16 @@
       }
     }
     const synthInterface = new SynthInterface();
-    const frequencyAnalyzer = new Tone.FFT(2048);
-    synthInterface.synth.connect(frequencyAnalyzer);
+    var analyser = Tone.context.createAnalyser();
+    analyser.fftSize = 2048;
+    var dataArray = new Uint8Array(analyser.frequencyBinCount); // Uint8Array should be the same length as the frequencyBinCount
+
+    synthInterface.synth.connect(analyser);
 
     const eqCanvasContext = document.querySelector('.equalizer-canvas').getContext("2d");
 
     const canvasWidth = eqCanvasContext.canvas.width = eqCanvasContext.canvas.clientWidth;
     const canvasHeight = eqCanvasContext.canvas.height = eqCanvasContext.canvas.clientHeight;
-
-    // Find the point in the wave form values array where the wave
-    // is on the ascent across the middle.
-    function findIndexOfTriggerPoint(frequencyValues) {
-      for (let i = 0; i < frequencyValues.length; i++) {
-        if (frequencyValues[i - 1] < 0 && frequencyValues[i] > 0) {
-          return i;
-        }
-      }
-    }
 
     // SHOULD RECONSIDER CALLING THIS FREQUENCY VALUES...WHAT"S THE RIGHT TERM FOR THE HEIGHT
     // OF THE VALUE ALONG A FREQUENCY LINE?
@@ -216,12 +209,12 @@
       const length = frequencyValues.length;
       let i = 0;
       let x = 0;
-      let y = canvasHeight - ( (frequencyValues[i] + 300) / 600) * canvasHeight;
+      let y = canvasHeight - ( frequencyValues[i] / 255) * canvasHeight;
       eqCanvasContext.moveTo(x, y);
       i += 1;
       for (; i < length; i++) {
         x = canvasWidth / length * i;
-        y = canvasHeight - ( (frequencyValues[i] + 300) / 600) * canvasHeight;
+        y = canvasHeight - ( frequencyValues[i] / 255) * canvasHeight;
         eqCanvasContext.lineTo(x, y);
       }
       eqCanvasContext.stroke();
@@ -229,8 +222,8 @@
 
     function loop() {
       requestAnimationFrame(loop);
-      var frequencyValues = frequencyAnalyzer.getValue();
-      drawEqualizer(frequencyValues);
+      analyser.getByteFrequencyData(dataArray);
+      drawEqualizer(dataArray);
     }
     loop();
 
