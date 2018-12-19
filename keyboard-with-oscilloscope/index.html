@@ -156,6 +156,9 @@
   </div>
   <script src="https://tonejs.github.io/build/Tone.js"></script>
   <script>
+    // Make note hits sound immediately.
+    Tone.context.lookAhead = 0;
+
     class SynthInterface {
       constructor() {
         this.keys = {};
